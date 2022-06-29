@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gitserver
+  labels:
+    app: gitserver
+spec:
+  selector:
+    matchLabels:
+      app: gitserver
+  template:
+    metadata:
+      labels:
+        app: gitserver
+    spec:
+      containers:
+        - name: gitserver
+          image: adrianliechti/loop-gitserver
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: data
+              mountPath: /data
+          resources: {}
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: gitserver
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gitserver
+  labels:
+    app: gitserver
+spec:
+  type: ClusterIP
+  selector:
+    app: gitserver
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: gitserver
+  labels:
+    app: gitserver
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
