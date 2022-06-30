@@ -1,20 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: gitserver
+  name: git
+  namespace: loop
   labels:
-    app: gitserver
+    app: git
 spec:
   selector:
     matchLabels:
-      app: gitserver
+      app: git
   template:
     metadata:
       labels:
-        app: gitserver
+        app: git
     spec:
       containers:
-        - name: gitserver
+        - name: git
           image: adrianliechti/loop-gitserver
           ports:
             - containerPort: 8080
@@ -25,18 +26,19 @@ spec:
       volumes:
         - name: data
           persistentVolumeClaim:
-            claimName: gitserver
+            claimName: git
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: gitserver
+  name: git
+  namespace: loop
   labels:
-    app: gitserver
+    app: git
 spec:
   type: ClusterIP
   selector:
-    app: gitserver
+    app: git
   ports:
     - name: http
       port: 80
@@ -45,9 +47,10 @@ spec:
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: gitserver
+  name: git
+  namespace: loop
   labels:
-    app: gitserver
+    app: git
 spec:
   accessModes:
     - ReadWriteOnce

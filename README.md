@@ -3,8 +3,8 @@
 ## Usage
 
 ```bash
-docker build . --tag loop-gitserver
-docker run -it --rm -p 8080:8080 loop-gitserver
+docker build . --tag loop-git
+docker run -it --rm -p 8080:8080 loop-git
 ```
 
 ```bash
